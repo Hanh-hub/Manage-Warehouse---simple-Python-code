@@ -24,7 +24,7 @@ class Queue:
         self.tail = None
 
     def add(self, item):
-        if self.head == None:
+        if self.head is None:
             self.head = item
             self.tail = item
         else:
@@ -47,13 +47,23 @@ class Queue:
         return not_found
 
     def delete(self, sku):
+
         item = self.getitem_location(sku)
-        prev_node = item.previous
-        next_node = item.next
-        prev_node.next = next_node
-        next_node.previous = prev_node
-        print('Deleted ', item.data.sku, )
-        print('-------------------------------')
+        if item.next is not None:
+            n1 = item.previous
+            n2 = item.next
+            n1.next = n2
+            n2.previous = n1
+            print('Deleted ', item.data.sku)
+        else:
+            self.tail=item.previous
+
+            n1 = item.previous
+            n2 = item.previous.next#idk if we need this
+            n2.previous = None #maybe extra
+            n1.next = None
+
+            print('Deleted ', item.data.sku)
 
     def addSku(self, sku):
 
@@ -83,7 +93,7 @@ class Queue:
                 self.shipping(sku)
             else:
                 print('invalid input.')
-                exit()
+                
         else:
 
             print('SKU-', item.data.sku, 'LxWxH = ', item.data.length, 'x',
@@ -116,11 +126,11 @@ class Queue:
         print('----------------------------------------------------')
         print('Here is the inventory from newest to oldest:')
         cur_node = self.tail
-        print('sku-',cur_node.data.sku)
 
-        while cur_node.previous != None:
-            cur_node = cur_node.previous
+        while cur_node.previous is not None:
             print('sku-', cur_node.data.sku)
+            cur_node = cur_node.previous
+        #print('sku-', cur_node.data.sku)
 
 
 shelf = Queue()
